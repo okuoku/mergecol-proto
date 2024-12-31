@@ -124,6 +124,19 @@ foreach(e ${paths})
     list(REMOVE_ITEM patha_${e} 0000000000000000000000000000000000000000)
     list(REMOVE_ITEM pathb_${e} 0000000000000000000000000000000000000000)
     message(STATUS "${e}:")
+
+    # Pass2.1: Filter out duplicates
+    foreach(c ${patha_${e}})
+        set(seen_${e}_${c} ON)
+    endforeach()
+    foreach(c ${pathb_${e}})
+        if(seen_${e}_${c})
+            list(REMOVE_ITEM patha_${e} ${c})
+            list(REMOVE_ITEM pathb_${e} ${c})
+        endif()
+    endforeach()
+    
+    # Pass2.2: Output
     foreach(c ${patha_${e}})
         message(STATUS "\tA ${c} ${author_${c}} ${mail_${c}}")
     endforeach()
